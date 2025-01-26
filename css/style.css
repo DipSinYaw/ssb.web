@@ -1,0 +1,206 @@
+body {
+  --head-height: 60px;
+  --head-top-space: 5px;
+  --showbdcolor: rgba(0, 0, 0, 0);
+}
+
+.container {
+  width: 0 auto 0 auto;
+  /* padding: 0 0%; */
+  /* width: fit-content; */
+  border: 1px solid var(--showbdcolor);
+}
+
+header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+}
+
+.head-bar {
+  background-color: rgb(255, 0, 0);
+  display: flex;
+  /* align-items:end; */
+  /* flex-wrap: wrap; */
+  justify-content: right;
+  width: 100%;
+  padding: 0 60px;
+  /* visibility: hidden; */
+}
+
+.page-title {
+  min-width: 350px;
+  height: var(--head-height);
+  font-size: calc(var(--head-height) *0.9);
+  font-family: Arial;
+  margin-top: calc(var(--head-height) + 1%);
+  color: red;
+
+  /* border: 1px solid black; */
+}
+
+/* .top-right {
+  float: right;
+} */
+
+.sports-history {
+  color: orange;
+}
+
+.computing-history {
+  color: green;
+}
+
+.nav-btn {
+  align-items: center;
+  display: flex;
+  /* height: var(--head-height); */
+  margin: var(--head-top-space);
+  /* border: 1px solid black; */
+}
+
+.nav-btn a {
+  /* background-color: #04AA6D;  */
+  border: none;
+  color: white;
+  /* border: 2px solid #ffffff; */
+  border-radius: 15px;
+  padding: 10px 20px;
+  /* height: var(--head-height); */
+  /* text-align: center; */
+  text-decoration: none;
+  display: inline-block;
+  /* flex-direction: row; */
+  left: 0;
+  font-size: calc(var(--head-height) * 0.35);
+  margin: 1.5px 20px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.nav-btn a:hover {
+  background-color: white;
+  color: red;
+}
+
+
+
+#div-id-avatar {
+  /* background-color: hsl(0, 0%, 100%); */
+
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+}
+
+#div-id-avatar-a-img {
+
+  background-color: hsl(0, 100%, 50%);
+  width: fit-content;
+  height: fit-content;
+  padding: 0px;
+  margin: 0;
+  border-radius: 50%;
+}
+
+#div-id-avatar-img {
+  vertical-align: middle;
+  border: 2px solid white;
+  width: calc(var(--head-height) - 15px);
+  height: calc(var(--head-height) - 15px);
+  border-radius: 50%;
+}
+
+/* #div-id-avatar-img:hover {
+  opacity: 0.9;
+} */
+.masking {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: auto;
+  opacity: 0;
+  transition: 0.4s ease;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.masking:hover .overlay {
+  opacity: 1;
+}
+
+
+
+
+
+/* Your CSS code here */
+.button-89 {
+  --b: 1.5px;
+  /* border thickness */
+  --s: .15em;
+  /* size of the corner */
+  --color: white;
+  --cstart: rgba(255, 255, 255, 0);
+
+  padding: calc(.2em + var(--s)) calc(.5em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background:
+    conic-gradient(from 90deg at var(--b) var(--b), #00000000 90deg, var(--cstart) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+  transition: .3s linear, color 0.3s, background-color 0s;
+  outline: var(--b) solid #0000;
+  outline-offset: .6em;
+  font-size: 16px;
+
+  border: 0;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+}
+
+.button-89:hover,
+.button-89:focus-visible {
+  --_p: 0px;
+  --cstart: rgb(255, 255, 255);
+  outline-color: var(--color);
+  outline-offset: .05em;
+}
+
+/* Your CSS svg */
+div.button-svg {
+  padding: 2px;
+  background-color: red;
+}
+
+.button-svg i {
+  font-size: 16px;
+  color: white;
+}
+
+.button-svg:hover i.initial-icon {
+  display: none;
+}
+
+.button-svg:hover i.changed-icon {
+  display: inline-block;
+}
+
+.button-svg i.changed-icon {
+  display: none;
+  transition: .3s color;
+
+}

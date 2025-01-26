@@ -1,0 +1,30 @@
+/* body {font-family: Arial, Helvetica, sans-serif;} */
+
+/* Full-width input fields */
+.dashboard input {
+  width: 100%;
+  padding: 8px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.dashboard .underline {
+  padding: 25px;
+  border-bottom: 1px solid #ff0000;
+}
+
+.dashboard button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 8px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.dashboard button:hover {
+  opacity: 0.8;
+}
