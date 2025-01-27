@@ -1,13 +1,18 @@
+/* General Styles - Used in all pages */
 body {
   --head-height: 60px;
   --head-top-space: 5px;
   --showbdcolor: rgba(0, 0, 0, 0);
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1240px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f6f6f6;
+  line-height: 1;
 }
 
 .container {
-  width: 0 auto 0 auto;
-  /* padding: 0 0%; */
-  /* width: fit-content; */
+  width: 100%;
   border: 1px solid var(--showbdcolor);
 }
 
@@ -20,58 +25,33 @@ header {
 .head-bar {
   background-color: rgb(255, 0, 0);
   display: flex;
-  /* align-items:end; */
-  /* flex-wrap: wrap; */
   justify-content: right;
   width: 100%;
   padding: 0 60px;
-  /* visibility: hidden; */
 }
 
 .page-title {
   min-width: 350px;
   height: var(--head-height);
-  font-size: calc(var(--head-height) *0.9);
+  font-size: calc(var(--head-height) * 0.9);
   font-family: Arial;
   margin-top: calc(var(--head-height) + 1%);
   color: red;
-
-  /* border: 1px solid black; */
-}
-
-/* .top-right {
-  float: right;
-} */
-
-.sports-history {
-  color: orange;
-}
-
-.computing-history {
-  color: green;
 }
 
 .nav-btn {
   align-items: center;
   display: flex;
-  /* height: var(--head-height); */
   margin: var(--head-top-space);
-  /* border: 1px solid black; */
 }
 
 .nav-btn a {
-  /* background-color: #04AA6D;  */
   border: none;
   color: white;
-  /* border: 2px solid #ffffff; */
   border-radius: 15px;
   padding: 10px 20px;
-  /* height: var(--head-height); */
-  /* text-align: center; */
   text-decoration: none;
   display: inline-block;
-  /* flex-direction: row; */
-  left: 0;
   font-size: calc(var(--head-height) * 0.35);
   margin: 1.5px 20px;
   transition-duration: 0.4s;
@@ -83,11 +63,7 @@ header {
   color: red;
 }
 
-
-
 #div-id-avatar {
-  /* background-color: hsl(0, 0%, 100%); */
-
   position: relative;
   width: fit-content;
   height: fit-content;
@@ -97,7 +73,6 @@ header {
 }
 
 #div-id-avatar-a-img {
-
   background-color: hsl(0, 100%, 50%);
   width: fit-content;
   height: fit-content;
@@ -114,9 +89,6 @@ header {
   border-radius: 50%;
 }
 
-/* #div-id-avatar-img:hover {
-  opacity: 0.9;
-} */
 .masking {
   position: relative;
   width: fit-content;
@@ -141,35 +113,23 @@ header {
   opacity: 1;
 }
 
-
-
-
-
-/* Your CSS code here */
 .button-89 {
   --b: 1.5px;
-  /* border thickness */
   --s: .15em;
-  /* size of the corner */
   --color: white;
   --cstart: rgba(255, 255, 255, 0);
-
   padding: calc(.2em + var(--s)) calc(.5em + var(--s));
   color: var(--color);
   --_p: var(--s);
-  background:
-    conic-gradient(from 90deg at var(--b) var(--b), #00000000 90deg, var(--cstart) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+  background: conic-gradient(from 90deg at var(--b) var(--b), #00000000 90deg, var(--cstart) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
   transition: .3s linear, color 0.3s, background-color 0s;
   outline: var(--b) solid #0000;
   outline-offset: .6em;
   font-size: 16px;
-
   border: 0;
-
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-
 }
 
 .button-89:hover,
@@ -180,7 +140,6 @@ header {
   outline-offset: .05em;
 }
 
-/* Your CSS svg */
 div.button-svg {
   padding: 2px;
   background-color: red;
@@ -202,5 +161,222 @@ div.button-svg {
 .button-svg i.changed-icon {
   display: none;
   transition: .3s color;
+}
 
+/* Product Gallery Styles - Used in index.html */
+.pro-gallery {
+  padding: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border: 1px solid var(--showbdcolor);
+}
+
+.product {
+  --minsize: 170px;
+  --maxsize: 280px;
+  width: 12vw;
+  min-width: var(--minsize);
+  max-width: var(--maxsize);
+  height: calc(15vw * 1.5);
+  min-height: calc(var(--minsize) * 1.5);
+  max-height: calc(var(--maxsize) * 1.5);
+  margin: 0.5vw;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--showbdcolor);
+}
+
+.pro-image {
+  width: 100%;
+  height: 80%;
+  margin: 2px;
+  border: 1px solid var(--showbdcolor);
+  display: flex;
+  justify-content: center;
+}
+
+.pro-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 1vw;
+  object-fit: cover;
+}
+
+.pro-icon {
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid var(--showbdcolor);
+}
+
+.pro-title {
+  width: 75%;
+  display: flex;
+  align-items: top;
+  color: black;
+  border: 1px solid var(--showbdcolor);
+}
+
+.pro-title h5 {
+  font-size: 1vw;
+}
+
+.pro-likes {
+  width: 25%;
+  display: flex;
+  border: 1px solid var(--showbdcolor);
+}
+
+.pro-likes a {
+  font-size: 18px;
+  display: flex;
+  align-items: top;
+  text-decoration: none;
+  border: 1px solid var(--showbdcolor);
+}
+
+/* Login Form Styles - Used in login.html */
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity: 1;
+}
+
+.cancelbtn {
+  background-color: #f44336;
+}
+
+.message {
+  margin: 15px 0;
+  color: #666;
+  text-align: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.head-bar nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.head-bar nav .avatar {
+  display: flex;
+  align-items: center;
+}
+
+.head-bar nav .avatar a {
+  margin-left: 10px;
+}
+
+/* Typography - Used in all pages */
+h1 {
+  font-size: 28px;
+  font-weight: 300;
+  flex: 1;
+}
+
+h5 {
+  font-weight: 500;
+  line-height: 1.7em;
+}
+
+h6 {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Product Layout - Used in index.html */
+.product-filter {
+  display: flex;
+  padding: 30px 0;
+}
+
+.sort {
+  display: flex;
+  align-self: flex-end;
+}
+
+.collection-sort {
+  display: flex;
+  flex-direction: column;
+}
+
+.collection-sort:first-child {
+  padding-right: 20px;
+}
+
+label {
+  color: #666;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 2em;
+  text-transform: uppercase;
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  padding: 2%;
+  flex: 1 16%;
+  background-color: #FFF;
+  box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.25);
+}
+
+.product-image img {
+  width: 100%;
+}
+
+.product-info {
+  margin-top: auto;
+  padding-top: 20px;
+  text-align: center;
+}
+
+@media (max-width: 920px) {
+  .product-card {
+    flex: 1 21%;
+  }
+  .products .product-card:first-child,
+  .products .product-card:nth-child(2) {
+    flex: 2 46%;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-card {
+    flex: 1 46%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    margin-bottom: 20px;
+  }
+  .product-filter {
+    flex-direction: column;
+  }
+  .sort {
+    align-self: flex-start;
+  }
 }
