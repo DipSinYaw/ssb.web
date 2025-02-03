@@ -1,7 +1,3 @@
-// Assuming api.js exports these functions
-// import { getUser, createUser, updateUser, createProduct } from './src/api.js';
-
-
 document.addEventListener("submit", function (event) {
   event.preventDefault();
   let updatePW = document.getElementById("update-password-form");
@@ -20,37 +16,37 @@ document.addEventListener("submit", function (event) {
 });
 
 async function updatePassword() {
-  let oldPassword = document.getElementById("old-password").value;
-  let newPassword = document.getElementById("new-password").value;
-  let confirmNewPassword = document.getElementById("confirm-new-password").value;
+  let oldPassword = document.getElementById("old-password");
+  let newPassword = document.getElementById("new-password");
+  let confirmNewPassword = document.getElementById("confirm-new-password");
   let user = getLoginUser();
-  if (undefined == user) {
+  if(undefined == user){
     alert("You have not login!!");
     return;
   }
 
   let id = user["_id"];
 
-  let userDetail = await getUser(id);
+  let userDetail = await getJson(customerBase, id);
 
-  if (userDetail.password !== oldPassword) {
-    alert("password authentication fail!! ");
+  if (userDetail.password !== hashPassword(oldPassword.value)) {
+    alert("password authodication fail!! ");
     return;
   }
 
-  if (newPassword !== confirmNewPassword) {
+  if (newPassword.value !== confirmNewPassword.value) {
     alert("Confirm new password do not match!!");
     return;
   }
 
-  userDetail.password = newPassword;
+  userDetail.password = hashPassword(newPassword.value);
 
-  let resp = await updateUser(id, userDetail);
+  let resp = updateJson(customerBase, userDetail, id);
 
-  oldPassword = "";
-  newPassword = "";
-  confirmNewPassword = "";
-  alert("Password updated successfully!");
+  oldPassword.value = "";
+  newPassword.value = "";
+  confirmNewPassword.value = "";
+  //   console.log("check resp: "+JSON.stringify(resp))
 }
 
 function getLoginUser() {

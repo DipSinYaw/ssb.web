@@ -1,5 +1,3 @@
-import { loginUser, registerUser, fetchUserDetailsByToken } from './api.js';
-
 document.addEventListener("DOMContentLoaded", function () {
   avatarDisplay();
 });
@@ -7,85 +5,135 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const targetName = event.target.getAttribute("name");
+  let submitLogout = document.getElementById("submit-logout");
+  let submitRegister = document.getElementById("submit-register");
+  let submitLogin = document.getElementById("submit-login");
+  let targetName = event.target.getAttribute("name");
 
-  if (targetName === "logoutForm") {
-    logout();
-  } else if (targetName === "registerForm") {
-    create();
-  } else if (targetName === "loginForm") {
-    login();
+  const user = "userDetail";
+  if (targetName == "logoutForm") {
+    // console.log("logoutForm");
+    submitLogout.addEventListener("click", logout());
+    avatarDisplay();
+  } else if (targetName == "registerForm") {
+    // console.log("registerForm, targetName: " + targetName);
+    submitRegister.addEventListener("click", create());
+    avatarDisplay();
+  } else if (targetName == "loginForm") {
+    // console.log("loginForm");
+    submitLogin.addEventListener(
+      "click",
+      login().then((respList) => {
+        if (respList) {
+          let userJson = respList[0];
+          // console.log("check id: " + respList[0]["_id"]);
+          if (undefined != userJson) {
+            delete userJson.password;
+            delete userJson.email;
+            let st = JSON.stringify(userJson);
+
+            // console.log("check login obj:" + st);
+            setCookie(user, st, 10);
+            avatarDisplay();
+            alert("Login successful!!");
+          }else{
+            alert("Username not exist!!");
+          }
+        } else {
+          alert("Username not exist!!");
+        }
+      })
+    );
   }
 
-  resetForms();
+  for (let frm of document.getElementsByClassName("modal-content")) {
+    frm.reset();
+  }
+
   closeLoginPop();
 });
 
-function displayPage(form, show = "none") {
-  const registerForm = document.querySelector(".register-form");
-  const loginForm = document.querySelector(".login-form");
-  const logoutForm = document.querySelector(".logout-form");
+function diplayPage(form, show = "none") {
+  // console.log("diplayPage");
+  let registerForm = document.getElementsByClassName("register-form")[0];
+  let loginForm = document.getElementsByClassName("login-form")[0];
+  let logoutForm = document.getElementsByClassName("logout-form")[0];
 
-  registerForm.style.display = form === "create" ? "block" : "none";
-  loginForm.style.display = form === "login" ? "block" : "none";
-  logoutForm.style.display = form === "logout" ? "block" : "none";
-
-  if (form === "logout") {
-    const user = JSON.parse(getCookie("userDetail"));
-    logoutForm.querySelector("b").innerText = `Do you want to log out, ${user.userName}?`;
+  if (form === "login") {
+    registerForm.style.display = "none";
+    loginForm.style.display = "block";
+    logoutForm.style.display = "none";
+    document.getElementsByClassName("modal")[0].style.display = show;
+  } else if (form === "logout") {
+    registerForm.style.display = "none";
+    loginForm.style.display = "none";
+    logoutForm.style.display = "block";
+    let userCookie = getCookie("userDetail");
+    let user = JSON.parse(userCookie);
+    logoutForm.getElementsByTagName("b")[0].innerHTML = `Do you want to log out, ${user.userName}?`;
+    document.getElementsByClassName("modal")[0].style.display = show;
+  } else if (form === "create") {
+    registerForm.style.display = "block";
+    loginForm.style.display = "none";
+    logoutForm.style.display = "none";
+    document.getElementsByClassName("modal")[0].style.display = show;
+  } else {
+    registerForm.style.display = "none";
+    loginForm.style.display = "none";
+    logoutForm.style.display = "none";
+    document.getElementsByClassName("modal")[0].style.display = show;
   }
-
-  document.querySelector(".modal").style.display = show;
 }
 
 function avatarDisplay() {
-  const authToken = getCookie("authToken");
-  const avatarA = document.getElementById("div-id-avatar-a-img");
-  const avatarImg = document.getElementById("div-id-avatar-img");
-  const loginButton = document.getElementById("div-id-avatar-a");
+  // console.log("avatarDisplay");
+  const user = "userDetail";
+  let cookieObj = getCookie(user);
+  let avatarA = document.getElementById("div-id-avatar-a-img");
+  let avatarImg = document.getElementById("div-id-avatar-img");
+  let loginButton = document.getElementById("div-id-avatar-a");
+  let titleAvatar = document.getElementsByClassName("title-avatar")[0];
 
-  if (authToken) {
-    const cookieObj = getCookie("userDetail");
-    if (!cookieObj) {
-      fetchUserDetailsByToken(authToken).then(userDetails => {
-        if (userDetails) {
-          setCookie("userDetail", JSON.stringify(userDetails), 10);
-          updateAvatar(userDetails.avatar);
-        }
-      });
-    } else {
-      const avatarObj = JSON.parse(cookieObj);
-      updateAvatar(avatarObj.avatar);
-    }
+  if (cookieObj) {
+    // console.log("check avatarDisplay has cookie: " + cookieObj);
+    let avatarObj = JSON.parse(cookieObj);
+    // console.log("check avatar: " + avatarObj.avatar);
+    avatarImg.src = avatarObj.avatar;
+    // avatarLogin.getElementsByTagName("img")[0].src = avatarObj.avatar;
+
+    avatarA.style.display = "block";
+    avatarImg.style.display = "block";
+
+    loginButton.style.display = "none";
+
+    diplayPage("logout");
+
+    return true;
   } else {
+    // console.log("check avatarDisplay not cookie: " + cookieObj);
     loginButton.style.display = "block";
+
     avatarA.style.display = "none";
     avatarImg.style.display = "none";
-    displayPage("login");
+
+    diplayPage("login");
+    return false;
   }
 }
 
-function updateAvatar(avatarUrl) {
-  const avatarA = document.getElementById("div-id-avatar-a-img");
-  const avatarImg = document.getElementById("div-id-avatar-img");
-  const loginButton = document.getElementById("div-id-avatar-a");
-
-  avatarImg.src = avatarUrl;
-  avatarA.style.display = "block";
-  avatarImg.style.display = "block";
-  loginButton.style.display = "none";
-  displayPage("logout");
-}
-
+// password encryption
 function hashPassword(password) {
+  // console.log("hashPassword");
   return CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
 }
 
 function closeLoginPop() {
-  displayPage();
+  // console.log("closeLoginPop");
+  diplayPage();
 }
 
 function UserObject(userName, email, password, avatar, productIds, createTime) {
+  // console.log("UserObject");
   this.userName = userName;
   this.email = email;
   this.password = password;
@@ -94,65 +142,50 @@ function UserObject(userName, email, password, avatar, productIds, createTime) {
   this.createTime = createTime;
 }
 
-async function create() {
-  const password = document.getElementById("register-password").value;
-  const confirmPassword = document.getElementById("register-confirm").value;
-
-  if (password !== confirmPassword) {
+function create() {
+  // console.log("create");
+  if (
+    document.getElementById("register-password").value !==
+    document.getElementById("register-confirm").value
+  ) {
     alert("Passwords do not match!!");
     return;
   }
 
-  const userName = document.getElementById("register-username").value;
-  const email = document.getElementById("register-email").value;
-  const createTime = Date.now().toString();
-  const avatarName = userName.replace(" ", "+");
-  const avatar = `https://ui-avatars.com/api/?name=${avatarName}&background=ffffff&color=ff0000`;
-  const user = new UserObject(userName, email, password, avatar, [], createTime);
+  let userName = document.getElementById("register-username").value;
+  let email = document.getElementById("register-email").value;
+  let password = hashPassword(
+    document.getElementById("register-password").value
+  );
+  let createTime = Date.now().toString();
 
+  let avatarName = userName.replace(" ", "+");
+  let avatar = `https://ui-avatars.com/api/?name=${avatarName}&background=ffffff&color=ff0000`;
+  let user = new UserObject(userName, email, password, avatar, [], createTime);
+  // console.log("check: " + user);
   if (user.email !== "") {
-    try {
-      const response = await registerUser(user);
-      console.log("User registered:", response);
-      alert("User registered successfully!");
-    } catch (error) {
-      console.error("Error registering user:", error);
-      alert("Error registering user. Please try again.");
-    }
+    createJson("customer", user);
   }
 }
 
-async function login() {
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+function login() {
+  // console.log("login");
+  let email = document.getElementById("login-email").value;
+  let password = document.getElementById("login-password").value;
 
-  const userData = { email, password };
+  let respList = getJson(
+    customerBase,
+    null,
+    `?q={"$and": [{"email":"${email}"}, {"password":"${hashPassword(
+      password
+    )}"}]}`
+  );
 
-  try {
-    const response = await loginUser(userData);
-    if (response) {
-      const { user, token } = response;
-      delete user.password;
-      setCookie("userDetail", JSON.stringify(user), 10);
-      setCookie("authToken", token, 10);
-      avatarDisplay();
-      alert("Login successful!!");
-    } else {
-      alert("Username not exist!!");
-    }
-  } catch (error) {
-    console.error("Error logging in user:", error);
-    alert("Error logging in user. Please try again.");
-  }
+  return respList;
 }
 
 function logout() {
-  delCookie("userDetail");
-  delCookie("authToken");
-  avatarDisplay();
-  alert("Logout successful!!");
-}
-
-function resetForms() {
-  document.querySelectorAll(".modal-content").forEach(form => form.reset());
+  // console.log("logout");
+  const user = "userDetail";
+  delCookie(user);
 }

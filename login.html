@@ -1,17 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/login.css" rel="stylesheet" type="text/css" />
-    <title>Login</title>
-</head>
-<body>
-<button onclick="document.getElementById('id-login-modal').style.display='block'" style="width:auto;">Login</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script src="./src/cookie.js"></script>
-<script src="./src/loginForm.js"></script>
-<script src="./src/login.js"></script>
-</body>
-</html>
+
+<!-- <h2>Modal Login Form</h2> -->
+
+<button onclick="document.getElementById('id-login-cancle').style.display='block'" style="width:auto;">Login</button>
+
+<div id="id-login-cancle" class="modal">
+    <link href="css/login.css" rel="stylesheet" type="text/css" />
+    <div class="register-form">
+        <form class="modal-content animate">
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+
+                <label for="eml"><b>Email</b></label>
+                <input type="email" placeholder="Enter Email" name="eml" required>
+
+                <button type="submit">Create</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id-login-cancle').style.display='none'"
+                    class="cancelbtn">Cancel</button>
+                <span class="message psw">Already registered? <a onclick="diplay('login')" href="#">Sign In</a></span>
+            </div>
+        </form>
+    </div>
+
+    <div class="login-form">
+        <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id-login-cancle').style.display='none'"
+                    class="cancelbtn">Cancel</button>
+                <span class="message psw">Not registered? <a onclick="diplay('register')" href="#">Create an
+                        account</a></span>
+            </div>
+        </form>
+    </div>
+    <script>
+        function diplay(form) {
+            let registerForm = document.getElementsByClassName('register-form')[0];
+            let loginForm = document.getElementsByClassName('login-form')[0];
+            if (form === 'login') {
+    
+                registerForm.style.display = "none";
+                loginForm.style.display = "block";
+            } else {
+                registerForm.style.display = "block";
+                loginForm.style.display = "none";
+            }
+        }
+    </script>
+</div>
+
