@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./src/cookie.js"></script>
-    <script src="./src/restdb.js"></script>
-    <script src="./src/login.js"></script>
-    <script src="./src/restdb.js"></script>
-    <script src="./src/dashboard.js"></script>
+    <script type="module" src="./src/cookie.js"></script>
+    <script type="module" src="./src/api.js"></script>
+    <script type="module" src="./src/login.js"></script>
+    <script type="module" src="./src/restdb.js"></script>
+    <script type="module" src="./src/dashboard.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
 
@@ -31,9 +31,9 @@
                 <a href="">Dashboard</a>
 
                 <div id="div-id-avatar" class="head-avatar">
-                    <a id="div-id-avatar-a" class="avatar-login" onclick="diplayPage('login','block')"
+                    <a id="div-id-avatar-a" class="avatar-login" onclick="displayPage('login','block')"
                         href="#login">Login</a>
-                    <a id="div-id-avatar-a-img" onclick="diplayPage('logout','block')" class="avatar-img">
+                    <a id="div-id-avatar-a-img" onclick="displayPage('logout','block')" class="avatar-img masking">
                         <div class="marking">
                             <img id="div-id-avatar-img" src="" alt="Avatar" class="avatar">
                             <div class="overlay"></div>
@@ -64,7 +64,7 @@
 
                 <div class="container" style="background-color:#f1f1f1">
                     <button type="button" onclick="closeLoginPop()" class="cancelbtn">Cancel</button>
-                    <span class="message psw">Already registered? <a onclick="diplayPage('login','block')" href="#">Sign
+                    <span class="message psw">Already registered? <a onclick="displayPage('login','block')" href="#">Sign
                             In</a></span>
                 </div>
             </form>
@@ -83,7 +83,7 @@
 
                     <div class="container" style="background-color:#f1f1f1">
                         <button type="button" onclick="closeLoginPop()" class="cancelbtn">Cancel</button>
-                        <span class="message psw">Not registered? <a onclick="diplayPage('create','block')"
+                        <span class="message psw">Not registered? <a onclick="displayPage('create','block')"
                                 href="#">Create an
                                 account</a></span>
                     </div>

@@ -1,42 +1,23 @@
-function setCookie(cname, cvalue, exdays) {
+// src/cookie.js
+
+export function setCookie(name, value, days) {
   const d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = "expires=" + d.toUTCString();
+  document.cookie = `${name}=${value};${expires};path=/`;
 }
 
-function getCookie(cname) {
-  // console.log("check cname:"+cname)
-  let name = cname + "=";
-  let ca = document.cookie.split(";");
+export function getCookie(name) {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    // console.log("check "+c)
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-    
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
   }
-
-  return "";
+  return null;
 }
 
-function delCookie(cname) {
-  let expires = -1;
-  document.cookie = cname + "=" + ";" + expires + ";path=/";
+export function delCookie(name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
-
-// function checkCookie() {
-//   let user = getCookie("username");
-//   if (user != "") {
-//     alert("Welcome again " + user);
-//   } else {
-//     user = prompt("Please enter your name:", "");
-//     if (user != "" && user != null) {
-//       setCookie("username", user, 365);
-//     }
-//   }
-// }
