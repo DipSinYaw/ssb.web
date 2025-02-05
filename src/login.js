@@ -1,10 +1,10 @@
-import {loginUser, registerUser} from './api.js';
+import {loginUser, logoutUser, registerUser} from './api.js';
 import {getCookie, setCookie, delCookie} from './cookie.js';
 
 document.addEventListener("DOMContentLoaded", function () {
     avatarDisplay();
 
-    document.getElementById("submit-logout").addEventListener("click", logout);
+    // document.getElementById("submit-logout").addEventListener("click", logout);
     // document.getElementById("submit-register").addEventListener("click", create);
     document.getElementById("submit-login").addEventListener("click", async function (event) {
         event.preventDefault();
@@ -159,8 +159,9 @@ function login() {
     return respList;
 }
 
-function logout() {
-    delCookie("userDetail");
+async function logout() {
+    const res = await logoutUser();
+    console.log("check res: " + JSON.stringify(res));
 }
 
 window.displayPage = displayPage;

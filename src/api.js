@@ -1,22 +1,22 @@
 // src/api.js
 
-import { getCookie, setCookie } from './cookie.js';
+import {delCookie, getCookie} from './cookie.js';
 
 const API_BASE_URL = 'http://localhost:3000'; // Or your actual API base URL
 
-function getTokenFromCookies() {
-    return getCookie('token');
+function getUserFromCookies() {
+    return getCookie("userDetail");
 }
 
 async function fetchAPI(endpoint, options = {}) {
-    const token = getTokenFromCookies();
+    const user = getUserFromCookies();
     const headers = {
         'Content-Type': 'application/json',
         ...options.headers,
     };
 
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+    if (endpoint !== '/user/registerUser' && endpoint !== '/user/login' && user.token) {
+        headers['Authorization'] = `Bearer ${user.token}`;
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -53,22 +53,20 @@ export async function registerUser(userData) {
 }
 
 export async function loginUser(credentials) {
-    const response = await fetchAPI('/user/login', {
+    return await fetchAPI('/user/login', {
         method: 'POST',
         body: JSON.stringify(credentials),
     });
-
-    // if (response.token) {
-    //     setCookie('token', response.token, 7); // Set token cookie for 7 days
-    // }
-
-    return response;
 }
 
 export async function logoutUser() {
-    return fetchAPI('/user/logout', {
+    const response = fetchAPI('/user/logout', {
         method: 'POST',
     });
+
+    delCookie("userDetail");
+
+    return response;
 }
 
 export async function removeUser(userId) {
