@@ -4,8 +4,6 @@ import {getCookie, setCookie, delCookie} from './cookie.js';
 document.addEventListener("DOMContentLoaded", function () {
     avatarDisplay();
 
-    // document.getElementById("submit-logout").addEventListener("click", logout);
-    // document.getElementById("submit-register").addEventListener("click", create);
     document.getElementById("submit-login").addEventListener("click", async function (event) {
         event.preventDefault();
         await handleLogin();
@@ -62,7 +60,7 @@ function displayPage(form, show = "none") {
         logoutForm.style.display = "block";
         let userCookie = getCookie("userDetail");
         let user = JSON.parse(userCookie);
-        logoutForm.getElementsByTagName("b")[0].innerHTML = `Do you want to log out, ${user.userName}?`;
+        logoutForm.getElementsByTagName("b")[0].innerHTML = `Do you want to log out, ${user.name}?`;
         document.getElementsByClassName("modal")[0].style.display = show;
     } else if (form === "create") {
         registerForm.style.display = "block";
@@ -166,8 +164,5 @@ async function logout() {
 
 window.displayPage = displayPage;
 window.avatarDisplay = avatarDisplay;
-// window.hashPassword = hashPassword;
 window.closeLoginPop = closeLoginPop;
-// window.UserObject = UserObject;
 window.create = create;
-// window.login = login;

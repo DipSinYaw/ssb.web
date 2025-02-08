@@ -4,19 +4,36 @@ import {delCookie, getCookie} from './cookie.js';
 
 const API_BASE_URL = 'http://localhost:3000'; // Or your actual API base URL
 
-function getUserFromCookies() {
-    return getCookie("userDetail");
+async function getUserFromCookies() {
+    const user = JSON.parse(getCookie("userDetail"));
+    if(user){
+        return user.token;
+    }
+    return null;
 }
 
 async function fetchAPI(endpoint, options = {}) {
-    const user = getUserFromCookies();
+    const token = await getUserFromCookies();
     const headers = {
         'Content-Type': 'application/json',
         ...options.headers,
     };
 
-    if (endpoint !== '/user/registerUser' && endpoint !== '/user/login' && user.token) {
-        headers['Authorization'] = `Bearer ${user.token}`;
+    // try {
+    //     const parse = JSON.parse(token);
+    //
+    //     console.log("check true token:"+parse.token);
+    // } catch (e) {
+    //
+    //     console.log("check false token!!!");
+    // }
+
+    // if(token){
+    //     console.log("check token:"+token);
+    // }
+
+    if (endpoint !== '/token/registerUser' && endpoint !== '/token/login' && token) {
+        headers['Authorization'] = `Bearer ${token}`;
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -80,11 +97,18 @@ export async function getUserById(userId) {
     return fetchAPI(`/user/${userId}`);
 }
 
+export async function updateUserById(user) {
+    return await fetchAPI(`/user/updateById`, {
+        method: "POST",
+        body:  JSON.stringify( user ) ,
+    });
+}
+
 
 // Product API
 
 export async function getAllProducts() {
-    return fetchAPI('/product');
+    return await fetchAPI('/product');
 }
 
 export async function getProductById(productId) {
@@ -130,14 +154,14 @@ export async function updateProductPhoto(formData) {
 }
 
 export async function likeProduct(productId) {
-    return fetchAPI(`/products/like`, {
+    return await fetchAPI(`/product/like`, {
         method: 'PUT',
         body: JSON.stringify({ productId }),
     });
 }
 
 export async function unlikeProduct(productId) {
-    return fetchAPI(`/product/unlike`, {
+    return await fetchAPI(`/product/unlike`, {
         method: 'PUT',
         body: JSON.stringify({ productId }),
     });
@@ -192,27 +216,6 @@ export async function testAPI(endpoint, method, headersText, bodyText) {
 export async function convertPhoto(response) {
     console.log("check fetchAPI !!")
 
-    // if (response && response.data) {
-    //     const base64String = await bufferToBase64(response.data);
-    //     const mimeType = 'image/png'; // Default to 'image/jpeg' if mimeType is not provided
-    //     const imgSrc = `data:${mimeType};base64,${base64String}`;
     document.getElementById('photo-show').innerHTML = `<img src="${imgSrc}" alt="product photo">`;
-    //     // document.getElementById('photo-show').textContent = 'Photo available';
-    // } else {
-    //     document.getElementById('photo-show').textContent = 'No photo available';
-    // }
 
-    // const formData = new FormData();
-    // formData.append('photo', photo);
-    // return formData;
-}
-
-export async function bufferToBase64(buffer) {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
 }

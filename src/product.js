@@ -1,3 +1,6 @@
+import {getAllProducts, likeProduct, unlikeProduct} from "./api.js";
+import {getCookie} from './cookie.js';
+
 let imgNum = 100;
 let user = {
   userId: 1,
@@ -28,10 +31,6 @@ class Product {
   }
 }
 
-async function getProducts() {
-  let products = await getJson(productBase);
-}
-
 async function checkUpdate() {
   let updateTimeKey = "products-load-time";
   let update = localStorage.getItem(updateTimeKey);
@@ -46,71 +45,107 @@ async function checkUpdate() {
   return false;
 }
 
-async function getLocalStorageProduct() {
-  let productsKey = "products-local-storage";
+// async function getLocalStorageProduct() {
+//   let productsKey = "products-local-storage";
+//
+//   let products = JSON.parse(localStorage.getItem(productsKey));
+//   if (
+//     undefined == products ||
+//     products.length == 0 ||
+//     checkUpdate()
+//   ) {
+//     products = await getJson(productBase,null,"?q={}&sort=createTime&dir=-1");
+//     // products = products.reverse();
+//     localStorage.setItem(productsKey, JSON.stringify(products));
+//   }
+//   return products;
+// }
 
-  let products = JSON.parse(localStorage.getItem(productsKey));
-  if (
-    undefined == products ||
-    products.length == 0 ||
-    checkUpdate()
-  ) {
-    products = await getJson(productBase,null,"?q={}&sort=createTime&dir=-1");
-    // products = products.reverse();
-    localStorage.setItem(productsKey, JSON.stringify(products));
-  }
-  return products;
+async function divPhoto(product, productId, photo, productName, likes) {
+  product
+      .getElementsByClassName("pro-image")[0]
+      .getElementsByTagName("img")[0].src = photo;
+  product
+      .getElementsByClassName("pro-title")[0]
+      .getElementsByTagName("h5")[0].innerHTML = productName;
+  const productLikes = product
+      .getElementsByClassName("btn-like")[0]
+      .getElementsByTagName("h5")[0];
+  productLikes.innerHTML = `${likes.length}`;
+
+  let userDetail = await JSON.parse(getCookie("userDetail"));
+
+  const likeButton = product.getElementsByClassName("btn-like")[0];
+  likeButton.addEventListener('click', async () => {
+    const userId = userDetail.id;
+    const proId =  productId;
+    const likesList = likes;
+    likes = await addRemoveLikes(likesList, proId, userId)
+    productLikes.innerHTML = likes.length;
+  });
+
+
 }
 
+async function addRemoveLikes(likes, productId, userId) {
+
+  const index = likes.indexOf(userId);
+
+  if (index > -1) {
+    await unlikeProduct(productId).then( async r => {
+      if(r.status < 200 && r.status >=300){
+        alert(r.message);
+      }
+      likes.splice(index, 1);
+      console.log("check cut likes: "+likes + " cut id:"+ userId);
+    });
+
+  } else {
+    await likeProduct(productId).then( async r => {
+      if(r.status < 200 && r.status >=300){
+        alert(r.message);
+      }
+      likes.push(userId);
+      console.log("check add likes: "+likes + " add id:"+ userId);
+    });
+  }
+  // console.log("check end likesStore: "+likes);
+  return likes;
+}
+
+
 document.addEventListener("DOMContentLoaded", async function () {
-  // let imgNum = 10;
-
+  console.log("check addEventListener!")
   let productDivlist = document.getElementsByClassName("product");
+  console.log("check load product!")
 
-  let products = await getLocalStorageProduct();
+  const dataResult = await getAllProducts();
+  const photoLength = dataResult.length;
+
+  // let products = await getLocalStorageProduct();
 
   const imgDiv = document.getElementById("pro");
-  duplicateDiv(imgDiv, imgNum + products.length);
+  duplicateDiv(imgDiv, photoLength-1);
 
   let i = 0;
 
   for (let product of productDivlist) {
-    if (i < products.length) {
-      // console.log("check restDbProduct: " + JSON.stringify(products[i]));
-
-      product
-        .getElementsByClassName("pro-image")[0]
-        .getElementsByTagName("img")[0].src = products[i].imgLink;
-      product
-        .getElementsByClassName("pro-title")[0]
-        .getElementsByTagName("h5")[0].innerHTML = products[i].name;
-      product
-        .getElementsByClassName("btn-like")[0]
-        .getElementsByTagName("h5")[0].innerHTML =
-        "+" +
-        `${
-          Number(generateSize() / 10 + generateSize() / 100) +
-          Number(products[i].likes)
-        } `;
-    } else {
-      // console.log("check getPicSumImage: ");
-      let url = getPicSumImage();
-
-      // console.log(getPrdoctName(url));
-
-      product
-        .getElementsByClassName("pro-image")[0]
-        .getElementsByTagName("img")[0].src = url;
-      product
-        .getElementsByClassName("pro-title")[0]
-        .getElementsByTagName("h5")[0].innerHTML = getPrdoctName(url);
-
-      product
-        .getElementsByClassName("btn-like")[0]
-        .getElementsByTagName("h5")[0].innerHTML =
-        "+" + (generateSize() / 10 + generateSize() / 100);
+    if (i < photoLength) {
+      // console.log("check dataResult: "+JSON.stringify(dataResult[i]))
+      await divPhoto(product, dataResult[i].productId, dataResult[i].photo, dataResult[i].productName, dataResult[i].userLikes);
     }
-
+    // else {
+    //   let url = getPicSumImage();
+    //   product
+    //       .getElementsByClassName("pro-image")[0]
+    //       .getElementsByTagName("img")[0].src = url;
+    //   product
+    //       .getElementsByClassName("pro-title")[0]
+    //       .getElementsByTagName("h5")[0].innerHTML = getPrdoctName(url);
+    //   product
+    //       .getElementsByClassName("btn-like")[0]
+    //       .getElementsByTagName("h5")[0].innerHTML = "+" + (generateSize() / 10 + generateSize() / 100);
+    // }
     i++;
   }
 });
@@ -141,44 +176,44 @@ function duplicateDiv(imgDiv, imgNum) {
   }
 }
 
-function getPrdoctName(url) {
-  let code = url.split("/");
-  // console.log("check "+(`${(code[3]/100)}${(code[4]/100)}`));
-  let productCode = `${code[3] / 100}${code[4] / 100}`;
-  // console.log("check" + productCode);
-
-  switch (Number(productCode)) {
-    case 11:
-      return "ADIDAS";
-    case 12:
-      return "NIKE";
-    case 13:
-      return "PUMA";
-    case 14:
-      return "NEW BALANCE";
-    case 21:
-      return "GAP";
-    case 22:
-      return "CALVIN KLEIN";
-    case 23:
-      return "FILA";
-    case 24:
-      return "ELLESSE";
-    case 31:
-      return "COTTON";
-    case 32:
-      return "FILA";
-    case 33:
-      return "CHERRY";
-    case 34:
-      return "SKETCHES";
-    case 41:
-      return "UNDER ARMOUR";
-    case 42:
-      return "BATA";
-    case 43:
-      return "H&M";
-    case 44:
-      return "GAP";
-  }
-}
+// function getPrdoctName(url) {
+//   let code = url.split("/");
+//   // console.log("check "+(`${(code[3]/100)}${(code[4]/100)}`));
+//   let productCode = `${code[3] / 100}${code[4] / 100}`;
+//   // console.log("check" + productCode);
+//
+//   switch (Number(productCode)) {
+//     case 11:
+//       return "ADIDAS";
+//     case 12:
+//       return "NIKE";
+//     case 13:
+//       return "PUMA";
+//     case 14:
+//       return "NEW BALANCE";
+//     case 21:
+//       return "GAP";
+//     case 22:
+//       return "CALVIN KLEIN";
+//     case 23:
+//       return "FILA";
+//     case 24:
+//       return "ELLESSE";
+//     case 31:
+//       return "COTTON";
+//     case 32:
+//       return "FILA";
+//     case 33:
+//       return "CHERRY";
+//     case 34:
+//       return "SKETCHES";
+//     case 41:
+//       return "UNDER ARMOUR";
+//     case 42:
+//       return "BATA";
+//     case 43:
+//       return "H&M";
+//     case 44:
+//       return "GAP";
+//   }
+// }
