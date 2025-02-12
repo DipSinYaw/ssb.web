@@ -36,11 +36,9 @@ async function handleLogin() {
     let userJson = await login();
     if (userJson) {
         let st = JSON.stringify(userJson.data);
-        setCookie("userDetail", st, 10);
+        setCookie("userDetail", st, 1);
         avatarDisplay();
         alert("Login successful!!");
-    } else {
-        alert("Username not exist!!");
     }
 }
 
@@ -99,10 +97,6 @@ function avatarDisplay() {
         return false;
     }
 }
-
-// function hashPassword(password) {
-//   return CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-// }
 
 function closeLoginPop() {
     displayPage();

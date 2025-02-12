@@ -93,3 +93,13 @@ h5 {
   text-decoration: none;
   border: 1px solid var(--showbdcolor);
 }
+
+.btn-like {
+  fill: lightgrey;
+  color: lightgrey;
+}
+
+.btn-like.like {
+  fill: dodgerblue;
+  color: dodgerblue;
+}

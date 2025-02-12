@@ -1,5 +1,4 @@
 import { addProduct, updateUserById } from './api.js';
-// import { getCookie } from "./cookie";
 
 let resizedImageData = null;
 
@@ -19,8 +18,6 @@ document.getElementById('product-image').addEventListener('change', async functi
         const ctx = canvas.getContext('2d');
         ctx.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
         resizedImageData = canvas.toDataURL('image/jpeg', rt);
-
-        console.log("check resizedImageData: "+JSON.stringify(resizedImageData))
 
         const imgDisplayElement = document.getElementById('uploaded-image');
         imgDisplayElement.src = resizedImageData;
@@ -57,18 +54,6 @@ export async function updatePassword() {
   }
 }
 
-// function getLoginUser() {
-//   const loginCookie = "userDetail";
-//   let userCookie = getCookie(loginCookie);
-//   console.log("check userCookie: " + userCookie);
-//   if (!userCookie) {
-//     return null;
-//   }
-//
-//   let user = JSON.parse(userCookie);
-//   return user.userName;
-// }
-
 class Product {
   constructor(name, spec, price, category, image) {
     this.productName = name;
@@ -96,6 +81,10 @@ export async function addProductBtn() {
 
   if (productDetail) {
     const response = await addProduct(productDetail);
+
+    if(response){
+      alert(`${productDetail.productName} added successful!!`);
+    }
   }
 
   let addPD = document.getElementById("add-product-form");

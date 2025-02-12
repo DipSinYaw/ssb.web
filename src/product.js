@@ -45,22 +45,6 @@ async function checkUpdate() {
   return false;
 }
 
-// async function getLocalStorageProduct() {
-//   let productsKey = "products-local-storage";
-//
-//   let products = JSON.parse(localStorage.getItem(productsKey));
-//   if (
-//     undefined == products ||
-//     products.length == 0 ||
-//     checkUpdate()
-//   ) {
-//     products = await getJson(productBase,null,"?q={}&sort=createTime&dir=-1");
-//     // products = products.reverse();
-//     localStorage.setItem(productsKey, JSON.stringify(products));
-//   }
-//   return products;
-// }
-
 async function divPhoto(product, productId, photo, productName, likes) {
   product
       .getElementsByClassName("pro-image")[0]
@@ -68,36 +52,41 @@ async function divPhoto(product, productId, photo, productName, likes) {
   product
       .getElementsByClassName("pro-title")[0]
       .getElementsByTagName("h5")[0].innerHTML = productName;
-  const productLikes = product
-      .getElementsByClassName("btn-like")[0]
+
+  const likeProductBtn = product
+      .getElementsByClassName("btn-like")[0];
+  const productLikes = likeProductBtn
       .getElementsByTagName("h5")[0];
   productLikes.innerHTML = `${likes.length}`;
 
-  let userDetail = await JSON.parse(getCookie("userDetail"));
+  let userDetailId = await JSON.parse(getCookie("userDetail")).id;
+  if(likes.indexOf(userDetailId)>=0){
+    likeProductBtn.classList.add('like');
+  }
 
   const likeButton = product.getElementsByClassName("btn-like")[0];
   likeButton.addEventListener('click', async () => {
-    const userId = userDetail.id;
+    const userId = userDetailId;
     const proId =  productId;
     const likesList = likes;
-    likes = await addRemoveLikes(likesList, proId, userId)
+    likes = await addRemoveLikes(likeProductBtn, likesList, proId, userId)
     productLikes.innerHTML = likes.length;
   });
 
 
 }
 
-async function addRemoveLikes(likes, productId, userId) {
+async function addRemoveLikes(likeProductBtn, likes, productId, userId) {
 
   const index = likes.indexOf(userId);
 
-  if (index > -1) {
+  if (index >= 0) {
     await unlikeProduct(productId).then( async r => {
       if(r.status < 200 && r.status >=300){
         alert(r.message);
       }
       likes.splice(index, 1);
-      console.log("check cut likes: "+likes + " cut id:"+ userId);
+      likeProductBtn.classList.remove('like');
     });
 
   } else {
@@ -106,7 +95,7 @@ async function addRemoveLikes(likes, productId, userId) {
         alert(r.message);
       }
       likes.push(userId);
-      console.log("check add likes: "+likes + " add id:"+ userId);
+      likeProductBtn.classList.add('like');
     });
   }
   // console.log("check end likesStore: "+likes);
@@ -115,9 +104,7 @@ async function addRemoveLikes(likes, productId, userId) {
 
 
 document.addEventListener("DOMContentLoaded", async function () {
-  console.log("check addEventListener!")
   let productDivlist = document.getElementsByClassName("product");
-  console.log("check load product!")
 
   const dataResult = await getAllProducts();
   const photoLength = dataResult.length;
@@ -175,45 +162,3 @@ function duplicateDiv(imgDiv, imgNum) {
     imgDiv.parentNode.appendChild(clone);
   }
 }
-
-// function getPrdoctName(url) {
-//   let code = url.split("/");
-//   // console.log("check "+(`${(code[3]/100)}${(code[4]/100)}`));
-//   let productCode = `${code[3] / 100}${code[4] / 100}`;
-//   // console.log("check" + productCode);
-//
-//   switch (Number(productCode)) {
-//     case 11:
-//       return "ADIDAS";
-//     case 12:
-//       return "NIKE";
-//     case 13:
-//       return "PUMA";
-//     case 14:
-//       return "NEW BALANCE";
-//     case 21:
-//       return "GAP";
-//     case 22:
-//       return "CALVIN KLEIN";
-//     case 23:
-//       return "FILA";
-//     case 24:
-//       return "ELLESSE";
-//     case 31:
-//       return "COTTON";
-//     case 32:
-//       return "FILA";
-//     case 33:
-//       return "CHERRY";
-//     case 34:
-//       return "SKETCHES";
-//     case 41:
-//       return "UNDER ARMOUR";
-//     case 42:
-//       return "BATA";
-//     case 43:
-//       return "H&M";
-//     case 44:
-//       return "GAP";
-//   }
-// }
