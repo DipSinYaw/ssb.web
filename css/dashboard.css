@@ -28,3 +28,11 @@
 .dashboard button:hover {
   opacity: 0.8;
 }
+
+.pro-user-gallery button{
+  width: 160px;
+  height: 45px;
+  margin: 8px 1%;
+  background: dodgerblue;
+  border-radius: 15px;
+}

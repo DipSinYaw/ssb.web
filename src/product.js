@@ -1,13 +1,13 @@
 import {getAllProducts, likeProduct, unlikeProduct} from "./api.js";
 import {getCookie} from './cookie.js';
 
-let imgNum = 100;
-let user = {
-  userId: 1,
-};
-let productObj = {
-  usersLike: [1, 2, 3, 4, 5],
-};
+// let imgNum = 100;
+// let user = {
+//   userId: 1,
+// };
+// let productObj = {
+//   usersLike: [1, 2, 3, 4, 5],
+// };
 
 function generateSize() {
   return parseInt((Math.floor(Math.random() * 4) + 1) * 100);
@@ -31,21 +31,21 @@ class Product {
   }
 }
 
-async function checkUpdate() {
-  let updateTimeKey = "products-load-time";
-  let update = localStorage.getItem(updateTimeKey);
-  if (undefined == update || undefined == update.updateTime || update.updateTime < new Date().getTime()) {
-    let oneHour = 60 * 60 * 1000;
-    let updateTimeObj = {
-      updateTime: oneHour + new Date().getTime(),
-    };
-    localStorage.setItem(updateTimeKey, updateTimeObj);
-    return true;
-  }
-  return false;
-}
+// async function checkUpdate() {
+//   let updateTimeKey = "products-load-time";
+//   let update = localStorage.getItem(updateTimeKey);
+//   if (undefined == update || undefined == update.updateTime || update.updateTime < new Date().getTime()) {
+//     let oneHour = 60 * 60 * 1000;
+//     let updateTimeObj = {
+//       updateTime: oneHour + new Date().getTime(),
+//     };
+//     localStorage.setItem(updateTimeKey, updateTimeObj);
+//     return true;
+//   }
+//   return false;
+// }
 
-async function divPhoto(product, productId, photo, productName, likes) {
+export async function divPhoto(product, productId, photo, productName, likes) {
   product
       .getElementsByClassName("pro-image")[0]
       .getElementsByTagName("img")[0].src = photo;
@@ -137,24 +137,24 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-function likeBtn(likeList, userId) {
-  let a = [];
-  a.includes();
+// function likeBtn(likeList, userId) {
+//   let a = [];
+//   a.includes();
+//
+//   if (likeList.includes(userId)) {
+//     likeList;
+//   }
+//   likeList.innerHTML = "";
+//   for (let userId of productObj.usersLike) {
+//     let tr = document.createElement("tr");
+//     let tdLike = document.createElement("td");
+//     tdLike.textContent = userId;
+//     tr.appendChild(tdLike);
+//     likeList.appendChild(tr);
+//   }
+// }
 
-  if (likeList.includes(userId)) {
-    likeList;
-  }
-  likeList.innerHTML = "";
-  for (let userId of productObj.usersLike) {
-    let tr = document.createElement("tr");
-    let tdLike = document.createElement("td");
-    tdLike.textContent = userId;
-    tr.appendChild(tdLike);
-    likeList.appendChild(tr);
-  }
-}
-
-function duplicateDiv(imgDiv, imgNum) {
+export function duplicateDiv(imgDiv, imgNum) {
   for (let i = 0; i < imgNum; i++) {
     let clone = imgDiv.cloneNode(true); // "deep" clone
     clone.id = "pro" + i;

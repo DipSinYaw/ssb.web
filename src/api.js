@@ -181,6 +181,18 @@ export async function getPhoto(productId) {
     });
 }
 
+export async function getProductsByLike() {
+    return fetchAPI(`/product/getProductsByLikes`, {
+        method: 'GET',
+    });
+}
+
+export async function getProductsByCreateDate() {
+    return fetchAPI(`/product/getProductsByCreatedAt`, {
+        method: 'GET',
+    });
+}
+
 // Test API
 
 export async function testAPI(endpoint, method, headersText, bodyText) {
