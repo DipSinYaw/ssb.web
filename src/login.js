@@ -20,7 +20,7 @@ document.addEventListener("submit", function (event) {
         avatarDisplay();
     } else if (targetName === "registerForm") {
         create();
-        avatarDisplay();
+        // avatarDisplay();
     } else if (targetName === "loginForm") {
         handleLogin();
     }
@@ -127,13 +127,12 @@ async function create() {
     let user = new UserObject(userName, email, password, avatar, [], createTime);
 
     if (user.email !== "") {
-        try {
-            let res = await registerUser(user);
-            alert("Register successful!!");
-            console.log(res)
-        } catch (e) {
-            alert(e);
-        }
+            const message = await registerUser(user);
+            console.log("check message: "+JSON.stringify(message))
+            if (message.message){
+
+                return true;
+            }
     }
 }
 
@@ -159,4 +158,4 @@ async function logout() {
 window.displayPage = displayPage;
 window.avatarDisplay = avatarDisplay;
 window.closeLoginPop = closeLoginPop;
-window.create = create;
+// window.create = create;
